@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 
 import eventRoutes from "./routes/event.routes.js";
+import registrationRoutes from "./routes/registration.routes.js";
 
 const app = express();
 
@@ -13,5 +14,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/events", eventRoutes);
+app.use(
+  "/api/registrations",
+  registrationRoutes
+);
 
 export default app;
