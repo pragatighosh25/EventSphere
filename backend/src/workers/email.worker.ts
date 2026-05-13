@@ -2,20 +2,24 @@ import { Worker } from "bullmq";
 
 import { redisConnection } from "../config/redis.js";
 
+import { sendRegistrationEmail } from "../services/email.service.js";
+
 const emailWorker = new Worker(
   "emailQueue",
 
   async (job) => {
     console.log("Processing Email Job...");
 
-    console.log(job.data);
+    const { email, eventTitle } =
+      job.data;
 
-    await new Promise((resolve) =>
-      setTimeout(resolve, 3000)
+    await sendRegistrationEmail(
+      email,
+      eventTitle
     );
 
     console.log(
-      `Email sent to ${job.data.email}`
+      `Email sent to ${email}`
     );
   },
 
