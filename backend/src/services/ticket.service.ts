@@ -12,10 +12,8 @@ export const generateTicket = async (
   try {
     // QR DATA
     const qrData = JSON.stringify({
-      registrationId,
-      eventTitle,
-      userEmail,
-    });
+  registrationId,
+});
 
     // Generate QR as Data URL
     const qrImage = await QRCode.toDataURL(

@@ -3,6 +3,8 @@ import cors from "cors";
 
 import eventRoutes from "./routes/event.routes.js";
 import registrationRoutes from "./routes/registration.routes.js";
+import { serverAdapter } from "./config/bullBoard.js";
+import verificationRoutes from "./routes/verification.routes.js";
 
 const app = express();
 
@@ -17,6 +19,14 @@ app.use("/api/events", eventRoutes);
 app.use(
   "/api/registrations",
   registrationRoutes
+);
+app.use(
+  "/admin/queues",
+  serverAdapter.getRouter()
+);
+app.use(
+  "/api/tickets",
+  verificationRoutes
 );
 
 export default app;

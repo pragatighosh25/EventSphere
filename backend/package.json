@@ -11,6 +11,8 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@bull-board/api": "^7.1.5",
+    "@bull-board/express": "^7.1.5",
     "@prisma/client": "^6.19.3",
     "bullmq": "^5.76.8",
     "cors": "^2.8.6",
