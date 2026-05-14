@@ -1,6 +1,7 @@
 import { Worker } from "bullmq";
 
 import { redisConnection } from "../config/redis.js";
+import { getIO } from "../config/socket.js";
 
 import { sendRegistrationEmail } from "../services/email.service.js";
 
@@ -13,11 +14,15 @@ const emailWorker = new Worker(
     const { email, eventTitle } =
       job.data;
 
+    const io = getIO();
     await sendRegistrationEmail(
       email,
       eventTitle
     );
-
+    io.emit("emailSent", {
+  email,
+  eventTitle,
+});
     console.log(
       `Email sent to ${email}`
     );

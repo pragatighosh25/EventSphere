@@ -4,6 +4,7 @@ import PDFDocument from "pdfkit";
 import fs from "fs";
 import path from "path";
 
+
 export const generateTicket = async (
   registrationId: string,
   eventTitle: string,

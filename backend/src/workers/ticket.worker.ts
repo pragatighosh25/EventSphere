@@ -1,7 +1,7 @@
 import { Worker } from "bullmq";
 
 import { redisConnection } from "../config/redis.js";
-
+import { getIO } from "../config/socket.js";
 import { generateTicket } from "../services/ticket.service.js";
 
 const ticketWorker = new Worker(
@@ -28,6 +28,14 @@ const ticketWorker = new Worker(
     console.log(
       `Ticket generated at ${filePath}`
     );
+    // Socket.io realtime event
+    const io = getIO();
+
+    io.emit("ticketGenerated", {
+      registrationId,
+      eventTitle,
+      filePath,
+    });
   },
 
   {
