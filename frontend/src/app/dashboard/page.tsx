@@ -2,12 +2,23 @@
 
 import { useEffect, useState } from "react";
 
+import axios from "axios";
+
 import { socket } from "@/lib/socket";
 
 import {
   Card,
   CardContent,
 } from "@/components/ui/card";
+
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 type Activity = {
   type: string;
@@ -18,10 +29,22 @@ export default function DashboardPage() {
   const [activities, setActivities] =
     useState<Activity[]>([]);
 
+  const [stats, setStats] =
+    useState({
+      totalEvents: 0,
+      totalUsers: 0,
+      totalRegistrations: 0,
+    });
+
   useEffect(() => {
+    fetchStats();
+
     socket.on(
       "emailSent",
-      (data) => {
+      (data: {
+        email: string;
+        eventTitle: string;
+      }) => {
         setActivities((prev) => [
           {
             type: "email",
@@ -34,7 +57,11 @@ export default function DashboardPage() {
 
     socket.on(
       "ticketGenerated",
-      (data) => {
+      (data: {
+        registrationId: string;
+        eventTitle: string;
+        filePath: string;
+      }) => {
         setActivities((prev) => [
           {
             type: "ticket",
@@ -53,6 +80,36 @@ export default function DashboardPage() {
     };
   }, []);
 
+  const fetchStats = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/api/analytics/dashboard"
+      );
+
+      setStats(res.data.stats);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const chartData = [
+    {
+      name: "Events",
+      value: stats.totalEvents,
+    },
+
+    {
+      name: "Users",
+      value: stats.totalUsers,
+    },
+
+    {
+      name: "Registrations",
+      value:
+        stats.totalRegistrations,
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-black text-white p-8">
       <h1 className="text-4xl font-bold mb-8">
@@ -63,11 +120,11 @@ export default function DashboardPage() {
         <Card className="bg-zinc-900 border-zinc-800">
           <CardContent className="p-6">
             <h2 className="text-xl font-semibold">
-              Live Queue Events
+              Total Events
             </h2>
 
             <p className="text-4xl mt-4">
-              {activities.length}
+              {stats.totalEvents}
             </p>
           </CardContent>
         </Card>
@@ -75,11 +132,11 @@ export default function DashboardPage() {
         <Card className="bg-zinc-900 border-zinc-800">
           <CardContent className="p-6">
             <h2 className="text-xl font-semibold">
-              Email Worker
+              Users
             </h2>
 
-            <p className="text-green-400 mt-4">
-              Active
+            <p className="text-4xl mt-4">
+              {stats.totalUsers}
             </p>
           </CardContent>
         </Card>
@@ -87,15 +144,40 @@ export default function DashboardPage() {
         <Card className="bg-zinc-900 border-zinc-800">
           <CardContent className="p-6">
             <h2 className="text-xl font-semibold">
-              Ticket Worker
+              Registrations
             </h2>
 
-            <p className="text-green-400 mt-4">
-              Active
+            <p className="text-4xl mt-4">
+              {
+                stats.totalRegistrations
+              }
             </p>
           </CardContent>
         </Card>
       </div>
+
+      <Card className="bg-zinc-900 border-zinc-800 mb-8">
+        <CardContent className="p-6 h-[400px]">
+          <h2 className="text-2xl font-bold mb-6">
+            Analytics 📊
+          </h2>
+
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+          >
+            <BarChart data={chartData}>
+              <XAxis dataKey="name" />
+
+              <YAxis />
+
+              <Tooltip />
+
+              <Bar dataKey="value" />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
 
       <Card className="bg-zinc-900 border-zinc-800">
         <CardContent className="p-6">

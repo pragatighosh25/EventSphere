@@ -1,0 +1,76 @@
+version: "3.9"
+
+services:
+
+  frontend:
+    build:
+      context: ./frontend
+
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+
+    ports:
+      - "5000:5000"
+
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+    env_file:
+      - ./backend/.env
+
+  email-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.worker
+
+    command:
+      npx tsx src/workers/email.worker.ts
+
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+    env_file:
+      - ./backend/.env
+
+  ticket-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.worker
+
+    command:
+      npx tsx src/workers/ticket.worker.ts
+
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+    env_file:
+      - ./backend/.env
+
+  reminder-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.worker
+
+    command:
+      npx tsx src/workers/reminder.worker.ts
+
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+    env_file:
+      - ./backend/.env
