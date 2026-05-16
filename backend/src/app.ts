@@ -5,6 +5,7 @@ import eventRoutes from "./routes/event.routes.js";
 import registrationRoutes from "./routes/registration.routes.js";
 import { serverAdapter } from "./config/bullBoard.js";
 import verificationRoutes from "./routes/verification.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
@@ -28,5 +29,6 @@ app.use(
   "/api/tickets",
   verificationRoutes
 );
+app.use("/api/auth", authRoutes);
 
 export default app;

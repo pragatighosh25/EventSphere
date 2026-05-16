@@ -157,7 +157,7 @@ export default function DashboardPage() {
       </div>
 
       <Card className="bg-zinc-900 border-zinc-800 mb-8">
-        <CardContent className="p-6 h-[400px]">
+        <CardContent className="p-6 h-100">
           <h2 className="text-2xl font-bold mb-6">
             Analytics 📊
           </h2>
