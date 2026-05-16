@@ -6,6 +6,8 @@ import registrationRoutes from "./routes/registration.routes.js";
 import { serverAdapter } from "./config/bullBoard.js";
 import verificationRoutes from "./routes/verification.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
+import path from "path";
 
 const app = express();
 
@@ -30,5 +32,13 @@ app.use(
   verificationRoutes
 );
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use(
+  "/tickets",
+  express.static(path.join(
+    process.cwd(),
+    "tickets"
+  ))
+)
 
 export default app;
