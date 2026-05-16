@@ -83,7 +83,7 @@ export default function EventDetailsPage() {
 
   if (!event) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen pt-28 bg-black text-white flex items-center justify-center">
         Loading...
       </div>
     );

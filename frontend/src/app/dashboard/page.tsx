@@ -119,7 +119,7 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
+    <div className="min-h-screen pt-28 bg-black text-white p-8">
       <h1 className="text-4xl font-bold mb-8">
         Event Dashboard 🚀
       </h1>

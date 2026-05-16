@@ -38,7 +38,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen pt-28 bg-black text-white">
       {/* HERO */}
 
       <section className="h-[70vh] flex flex-col justify-center items-center text-center px-6">
