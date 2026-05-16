@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import { socket } from "@/lib/socket";
+import { useRouter } from "next/navigation";
 
 import {
   Card,
@@ -26,6 +27,7 @@ type Activity = {
 };
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [activities, setActivities] =
     useState<Activity[]>([]);
 
@@ -37,6 +39,12 @@ export default function DashboardPage() {
     });
 
   useEffect(() => {
+    const token =
+    localStorage.getItem("token");
+
+  if (!token) {
+    router.push("/login");
+  }
     fetchStats();
 
     socket.on(
@@ -78,7 +86,7 @@ export default function DashboardPage() {
         "ticketGenerated"
       );
     };
-  }, []);
+  }, [router]);
 
   const fetchStats = async () => {
     try {

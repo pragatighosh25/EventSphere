@@ -1,65 +1,120 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useEffect, useState } from "react";
+
+import { getEvents } from "@/lib/events";
+import Link from "next/link";
+
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card";
+
+type Event = {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+  date: string;
+};
+
+export default function HomePage() {
+  const [events, setEvents] =
+    useState<Event[]>([]);
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const fetchEvents = async () => {
+    try {
+      const data =
+        await getEvents();
+
+      setEvents(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="min-h-screen bg-black text-white">
+      {/* HERO */}
+
+      <section className="h-[70vh] flex flex-col justify-center items-center text-center px-6">
+        <h1 className="text-6xl font-bold max-w-4xl leading-tight">
+          Discover Amazing
+          Events Near You 🚀
+        </h1>
+
+        <p className="text-zinc-400 mt-6 text-xl max-w-2xl">
+          EventSphere helps you
+          discover, organize, and
+          manage events with
+          realtime ticketing and
+          async workflows.
+        </p>
+
+        <button className="mt-8 bg-white text-black px-8 py-4 rounded-2xl font-semibold text-lg hover:scale-105 transition">
+          Explore Events
+        </button>
+      </section>
+
+      {/* EVENTS */}
+
+      <section className="px-8 pb-20">
+        <h2 className="text-4xl font-bold mb-10">
+          Upcoming Events ✨
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {events.map((event) => (
+            <Link
+              key={event.id}
+              href={`/events/${event.id}`}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+            <Card
+              key={event.id}
+              className="bg-zinc-900 border-zinc-800 rounded-3xl overflow-hidden hover:scale-[1.02] transition"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <div className="h-48 bg-gradient-to-br from-purple-500 to-pink-500" />
+
+              <CardContent className="p-6">
+                <h3 className="text-2xl font-bold">
+                  {event.title}
+                </h3>
+
+                <p className="text-zinc-400 mt-3 line-clamp-3">
+                  {
+                    event.description
+                  }
+                </p>
+
+                <div className="mt-6 space-y-2 text-sm text-zinc-300">
+                  <p>
+                    📍{" "}
+                    {
+                      event.location
+                    }
+                  </p>
+
+                  <p>
+                    📅{" "}
+                    {new Date(
+                      event.date
+                    ).toLocaleDateString()}
+                  </p>
+                </div>
+
+                <button className="w-full mt-6 bg-white text-black py-3 rounded-2xl font-semibold hover:opacity-90">
+                  Register Now
+                </button>
+              </CardContent>
+            </Card>
+            </Link>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-39.5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/8 px-5 transition-colors hover:border-transparent hover:bg-black/4 dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-39.5"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </section>
     </div>
   );
 }
