@@ -70,11 +70,11 @@ export default function EventDetailsPage() {
         alert(
           "Registration successful 🎉"
         );
-      } catch (error) {
+      } catch (error: any) {
         console.log(error);
 
         alert(
-          "Registration failed"
+          error?.response?.data?.message ||"Registration failed"
         );
       } finally {
         setLoading(false);

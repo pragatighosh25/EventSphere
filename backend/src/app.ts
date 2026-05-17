@@ -8,6 +8,7 @@ import verificationRoutes from "./routes/verification.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import path from "path";
+import analyticRoutes from "./routes/analytics.routes.js";
 
 const app = express();
 
@@ -40,5 +41,6 @@ app.use(
     "tickets"
   ))
 )
+app.use("/api/analytics", analyticRoutes);
 
 export default app;

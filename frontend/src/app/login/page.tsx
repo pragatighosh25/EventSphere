@@ -43,7 +43,7 @@ export default function LoginPage() {
 
       localStorage.setItem(
         "userId",
-        res.data.userId
+        res.data.user.id
       );
 
       router.push("/dashboard");

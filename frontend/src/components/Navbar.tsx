@@ -2,17 +2,22 @@
 
 import Link from "next/link";
 
+import { useEffect, useState } from "react";
+
 import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const router = useRouter();
 
-  const token =
-    typeof window !== "undefined"
-      ? localStorage.getItem(
-          "token"
-        )
-      : null;
+  const [token, setToken] =
+    useState<string | null>(null);
+
+  useEffect(() => {
+    const storedToken =
+      localStorage.getItem("token");
+
+    setToken(storedToken);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem(
@@ -23,12 +28,15 @@ export default function Navbar() {
       "userId"
     );
 
+    setToken(null);
+
     router.push("/login");
   };
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-xl bg-black/40 border-b border-white/10">
       <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
+
         {/* LOGO */}
 
         <Link

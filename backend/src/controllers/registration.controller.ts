@@ -13,6 +13,24 @@ export const registerForEvent = async (
   try {
     const { userId, eventId } = req.body;
 
+    // CHECK EXISTING
+
+const existingRegistration =
+  await prisma.registration.findFirst({
+    where: {
+      userId,
+      eventId,
+    },
+  });
+
+if (existingRegistration) {
+  return res.status(400).json({
+    success: false,
+    message:
+      "Already registered for this event",
+  });
+}
+
     // Create Registration
     const registration =
       await prisma.registration.create({

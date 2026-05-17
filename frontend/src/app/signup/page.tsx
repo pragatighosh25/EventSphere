@@ -45,6 +45,10 @@ export default function SignupPage() {
         "token",
         res.data.token
       );
+      localStorage.setItem(
+        "userId",
+        res.data.user.id
+      );
 
       router.push("/dashboard");
     } catch (error) {
